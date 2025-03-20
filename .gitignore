@@ -1,4 +1,4 @@
- # Python
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -87,3 +87,6 @@ pip-delete-this-directory.txt
 
 # Cython debug symbols
 cython_debug/
+
+# Streamlit secrets
+.streamlit/secrets.toml
