@@ -32,9 +32,7 @@ def check_api_key():
         # Update the .env file
         with open(".env", "w") as f:
             f.write(f"OPENAI_API_KEY={api_key}\n")
-            f.write("# Optional: Specify the OpenAI model to use (defaults to gpt-4o if not specified)\n")
-            f.write("# OPENAI_MODEL=gpt-4o\n")
-        
+
         print("✅ API key saved to .env file.")
     else:
         print("✅ OpenAI API key found.")
