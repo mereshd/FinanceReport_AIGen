@@ -129,17 +129,47 @@ st.set_page_config(
     initial_sidebar_state="expanded"  # Show sidebar by default
 )
 
-# Custom CSS to apply minimal styling - restoring button positioning only
+# Custom CSS with improved header styling
 st.markdown("""
 <style>
-    /* Minimal styling */
+    /* Header styling - updated for proper sizing and visibility */
     .main-header {
-        font-size: 2rem;
-        font-weight: 600;
+        font-size: 2.5rem;
+        font-weight: 700;
         text-align: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+        margin-top: 1rem;
+        padding: 1rem;
+        color: white;
+        background-color: #131c42;
+        width: 100%;
+        display: block;
+        border-radius: 5px;
     }
     
+    /* Make sure the header container spans the full width */
+    [data-testid="stMarkdownContainer"] {
+        width: 100%;
+    }
+    
+    /* Force proper viewport scaling */
+    @media screen and (max-width: 1200px) {
+        .main-header {
+            font-size: 2rem;
+            padding: 0.75rem;
+        }
+    }
+    
+    /* Ensure content fills available space */
+    .block-container {
+        max-width: 100%;
+        padding-top: 2rem;
+        padding-right: 1rem;
+        padding-left: 1rem;
+        padding-bottom: 0rem;
+    }
+    
+    /* Rest of your existing CSS styles */
     .info-text {
         font-size: 1rem;
         text-align: center;
