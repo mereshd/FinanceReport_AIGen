@@ -129,22 +129,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"  # Show sidebar by default
 )
 
-# Custom CSS with improved header styling
+# Custom CSS with header size adjustment (no color changes)
 st.markdown("""
 <style>
-    /* Header styling - updated for proper sizing and visibility */
+    /* Header styling - increased size only */
     .main-header {
         font-size: 2.5rem;
         font-weight: 700;
         text-align: center;
         margin-bottom: 1.5rem;
         margin-top: 1rem;
-        padding: 1rem;
-        color: white;
-        background-color: #131c42;
+        padding: 0.5rem;
         width: 100%;
         display: block;
-        border-radius: 5px;
     }
     
     /* Make sure the header container spans the full width */
@@ -156,7 +153,7 @@ st.markdown("""
     @media screen and (max-width: 1200px) {
         .main-header {
             font-size: 2rem;
-            padding: 0.75rem;
+            padding: 0.5rem;
         }
     }
     
