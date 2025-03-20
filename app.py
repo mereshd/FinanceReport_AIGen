@@ -17,8 +17,13 @@ import re
 # Load environment variables
 load_dotenv()
 
-# Set OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Set OpenAI API key - updated to check both .env and secrets.toml
+if os.getenv("OPENAI_API_KEY"):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+elif hasattr(st, "secrets") and "OPENAI_API_KEY" in st.secrets:
+    openai.api_key = st.secrets["OPENAI_API_KEY"]
+else:
+    openai.api_key = None
 
 # Check OpenAI version and set appropriate client
 try:
@@ -278,11 +283,17 @@ st.markdown('<p class="main-header">Private Equity AI Reports Generator</p>', un
 st.markdown('<p class="info-text">Generate comprehensive financial analyses based on company information. Our AI will analyze the data and create a detailed report covering valuation, due diligence, market analysis, and investment considerations.</p>', unsafe_allow_html=True)
 
 # Check for API key
-if not os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY") == "your_api_key_here":
-    st.error("OpenAI API key not found or not set. Please add your API key to the .env file.")
+if not openai.api_key:
+    st.error("OpenAI API key not found. Please add your API key to the .env file or in Streamlit secrets.")
     st.markdown("""
+    You can add it to a `.env` file:
     ```
     OPENAI_API_KEY=your_api_key_here
+    ```
+    
+    Or to `.streamlit/secrets.toml`:
+    ```
+    OPENAI_API_KEY="your_api_key_here"
     ```
     """)
     st.stop()

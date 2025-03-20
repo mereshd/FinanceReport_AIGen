@@ -6,8 +6,20 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Set OpenAI API key
+# Set OpenAI API key - updated to check both .env and secrets.toml
+try:
+    import streamlit as st
+    has_streamlit = True
+except ImportError:
+    has_streamlit = False
+
+# First check .env file
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# If not found in .env, check Streamlit secrets if available
+if not openai.api_key and has_streamlit and hasattr(st, "secrets"):
+    if "OPENAI_API_KEY" in st.secrets:
+        openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Check OpenAI version and set appropriate client
 try:
