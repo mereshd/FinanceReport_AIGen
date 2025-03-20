@@ -129,7 +129,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"  # Show sidebar by default
 )
 
-# Custom CSS to apply minimal styling
+# Custom CSS to apply minimal styling - restoring button positioning only
 st.markdown("""
 <style>
     /* Minimal styling */
@@ -210,6 +210,14 @@ st.markdown("""
         margin-top: 15px;
         margin-bottom: 10px;
         color: #333;
+    }
+    
+    /* Button positioning only - no color/style changes */
+    div.stButton > button {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -299,14 +307,16 @@ if not openai.api_key:
     st.stop()
 
 
-# Add button to generate interrelated data
-if st.button("Generate Example Data", key="generate_example"):
-    company_name, industry, financials = generate_interrelated_data()
-    st.session_state['company_name'] = company_name
-    st.session_state['company_industry'] = industry
-    st.session_state['company_financials'] = financials
+# Add button to generate interrelated data - centered
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    if st.button("Generate Example Data", key="generate_example"):
+        company_name, industry, financials = generate_interrelated_data()
+        st.session_state['company_name'] = company_name
+        st.session_state['company_industry'] = industry
+        st.session_state['company_financials'] = financials
 
-# Create two columns for a better layout
+# Create two columns for company name and industry
 col1, col2 = st.columns(2)
 
 with col1:
@@ -314,17 +324,20 @@ with col1:
     
 with col2:
     company_industry = st.text_input("Industry:", value=st.session_state.get('company_industry', ''), key="input_company_industry")
+
+# Financial information field - outside of columns to span across the page
+company_financials = st.text_area(
+    "Financial Information:", 
+    value=st.session_state.get('company_financials', ''),
+    height=150,
+    placeholder="Enter key financial metrics, performance data, etc.",
+    key="input_company_financials"
+)
     
-    company_financials = st.text_area(
-        "Financial Information:", 
-        value=st.session_state.get('company_financials', ''),
-        height=150,
-        placeholder="Enter key financial metrics, performance data, etc.",
-        key="input_company_financials"
-    )
-    
-# Button to generate comprehensive report
-generate_comprehensive_btn = st.button("Generate Financial Analysis", key="generate_comprehensive")
+# Button to generate comprehensive report - centered
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    generate_comprehensive_btn = st.button("Generate Financial Analysis", key="generate_comprehensive")
 
 # Add unified report topics with descriptions
 unified_report_topics = {
@@ -402,9 +415,7 @@ if generate_comprehensive_btn:
             with progress_container:
                 progress_bar = st.progress(0)
                 status_text = st.empty()
-                
-                status_text.text("Initializing comprehensive financial analysis...")
-                
+                                
                 # Store progress bar and status text in session state for access by finance_agent.py
                 st.session_state['_progress_bar'] = progress_bar
                 st.session_state['_status_text'] = status_text
@@ -417,16 +428,18 @@ if generate_comprehensive_btn:
                 }
                 
                 # Add note about non-repetitive report generation
-                st.info("Generating a comprehensive report with unified topics to ensure cohesive analysis without duplication.")
+                info_message = st.info("Generating a comprehensive report based on the selected topics.")
                 
                 # Generate comprehensive report based on selected options
-                # The progress tracking is handled inside the finance_agent.py
                 comprehensive_report = st.session_state.finance_agent.generate_financial_report(
                     "Comprehensive Financial Analysis",
                     company_data,
                     "text",
                     selected_reports
                 )
+                
+                # Clear the info message once the report is generated
+                info_message.empty()
                 
                 # Add separators between topics in the report
                 if comprehensive_report:
@@ -472,8 +485,7 @@ if generate_comprehensive_btn:
             
             # Display the report directly without conversion
             if comprehensive_report:
-                st.success("Financial analysis generated successfully with unified topics!")
-                #st.info("Converting report to HTML... This may take a moment.")
+                st.success("The report has been generated successfully with the selected topics!")
                 html_content = markdown_to_html(comprehensive_report, company_name)
                 if html_content:
                     html_filename = f"financial_analysis_{company_name.replace(' ', '_').lower()}.html"
