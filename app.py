@@ -129,8 +129,90 @@ st.set_page_config(
     initial_sidebar_state="expanded"  # Show sidebar by default
 )
 
-# Load CSS
-load_css("static/style.css")
+# Custom CSS to apply minimal styling
+st.markdown("""
+<style>
+    /* Minimal styling */
+    .main-header {
+        font-size: 2rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-text {
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Example data styling */
+    .mock-prompt {
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        margin: 0.5rem 0;
+        background-color: #f8f9fa;
+        border-left: 3px solid #6c757d;
+    }
+    
+    .mock-prompt strong {
+        font-weight: 600;
+    }
+    
+    .data-field {
+        display: inline-block;
+        background-color: #f1f3f5;
+        padding: 0.15rem 0.3rem;
+        border-radius: 0.25rem;
+    }
+    
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background-color: #f8f9fa;
+        padding: 1rem;
+    }
+    
+    /* Simple table styling */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f5f5f5;
+    }
+    
+    /* Topic card styling */
+    .topic-card {
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-left: 3px solid #007bff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .topic-description {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 5px;
+    }
+    
+    /* Category styling */
+    .category-header {
+        font-weight: 600;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Initialize session state
 if 'finance_agent' not in st.session_state:
